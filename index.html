@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Validation</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+        #message { margin-top: 20px; color: red; }
+    </style>
+</head>
+<body>
+    <h1>Enter Your Key</h1>
+    <input type="text" id="keyInput" placeholder="Enter your key">
+    <button onclick="validateKey()">Submit</button>
+    <div id="message"></div>
+
+    <script>
+        async function validateKey() {
+            const key = document.getElementById('keyInput').value.trim();
+            if (!key) {
+                displayMessage("Please enter a key.");
+                return;
+            }
+
+            try {
+                const response = await fetch("keys.json"); // Fetch stored keys
+                const keys = await response.json();
+
+                if (keys.includes(key)) {
+                    displayMessage("Valid key! Redirecting...", "green");
+                    setTimeout(() => { window.location.href = "https://splunks.xyz/"; }, 2000);
+                } else {
+                    displayMessage("Invalid key. Try again.");
+                }
+            } catch (error) {
+                displayMessage("Error loading keys.");
+            }
+        }
+
+        function displayMessage(message, color = "red") {
+            const messageDiv = document.getElementById("message");
+            messageDiv.textContent = message;
+            messageDiv.style.color = color;
+        }
+    </script>
+</body>
+</html>
